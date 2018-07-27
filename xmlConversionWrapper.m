@@ -1,6 +1,8 @@
 % Convert OCT seg XML to .mat volumes
 
 
+subjectsToProcess={'11071','11077'};
+
 % set dropbox directory
 [~,hostname] = system('hostname');
 hostname = strtrim(lower(hostname));
@@ -34,19 +36,30 @@ fileListStruct=subdir(fullfile(dataRootDir,['*' inFileSuffix]));
 if ~isempty(fileListStruct)
     
     for ii = 1:length(fileListStruct)
-    
-        % Convert this XML file to a volume
-        mask = xml2volmask(fileListStruct(ii).name);
         
-        % Create an output file path        
-        outFileRoot = extractBefore(fileListStruct(ii).name,inFileSuffix);
-        outputFile = [outFileRoot outFileSuffix];
+        processThisOneFlag = true;
+        % Check if we have a list of subjects to process
+        if ~isempty(subjectsToProcess)
+            % Check if this subject is on the list
+            if ~contains(fileListStruct(ii).name,subjectsToProcess)
+                processThisOneFlag = false;
+            end
+        end
         
-        % Save the file
-        save(outputFile,'mask');
-        
-        % Report the conversion
-        fprintf([outputFile '\n']);
+        if processThisOneFlag
+            % Convert this XML file to a volume
+            mask = xml2volmask(fileListStruct(ii).name);
+            
+            % Create an output file path
+            outFileRoot = extractBefore(fileListStruct(ii).name,inFileSuffix);
+            outputFile = [outFileRoot outFileSuffix];
+            
+            % Save the file
+            save(outputFile,'mask');
+            
+            % Report the conversion
+            fprintf([outputFile '\n']);
+        end
     end
 end
 
