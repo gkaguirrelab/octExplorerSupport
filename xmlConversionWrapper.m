@@ -1,7 +1,7 @@
 % Convert OCT seg XML to .mat volumes
 
 
-subjectsToProcess={'11071','11077'};
+subjectsToProcess={'11083','11084','11086','11087','11088','11089','11091','11092','11093','11095','11096','11097','11098','11099'};
 
 % set dropbox directory
 [~,hostname] = system('hostname');
